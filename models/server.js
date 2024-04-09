@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
+const db = require('../database/connection');
+const User = require('./user');
+const Role = require('./role');
 
 class Server {
     constructor() {
@@ -16,6 +19,7 @@ class Server {
         }
 
         // Connect to database
+        this.dbConnection();
 
         // Middlewares
         this.middlewares();
@@ -25,7 +29,14 @@ class Server {
     }
 
     async dbConnection() {
-
+        try {
+            await db.authenticate();
+            await Role.sync({force: false});
+            await User.sync({force: false});
+            console.log('DATABASE CONNECTED');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     middlewares() {
