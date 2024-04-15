@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
 const db = require('../database/connection');
-const User = require('./user');
 const Role = require('./role');
+const User = require('./user');
 
 class Server {
     constructor() {
@@ -31,8 +31,8 @@ class Server {
     async dbConnection() {
         try {
             await db.authenticate();
-            await Role.sync({force: false});
-            await User.sync({force: false});
+            await Role.sync({ force: false });
+            await User.sync({ force: false });
             console.log('DATABASE CONNECTED');
         } catch (error) {
             console.log(error);
@@ -44,12 +44,16 @@ class Server {
         // Morgan
         this.app.use(logger('dev'));
 
+        // Read and parse body
+        this.app.use(express.json());
+
         // Cors
         this.app.use(cors());
     }
 
     routes() {
         this.app.use(this.paths.auth, require('../routes/authRoutes'));
+        this.app.use(this.paths.user, require('../routes/userRoutes'));
     }
 
     listen() {
