@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db:seed": "npx sequelize db:seed:all",
-    "db:migrate": "npx sequelize db:migrate"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +21,8 @@
     "mysql2": "^3.9.3",
     "sequelize": "^6.37.2",
     "sequelize-cli": "^6.6.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1"
   }
 }
