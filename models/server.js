@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
+
 const db = require('../database/connection');
 const Role = require('./role');
 const User = require('./user');
@@ -10,7 +11,6 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.server = require('http').createServer(this.app);
-
 
         // Paths
         this.paths = {

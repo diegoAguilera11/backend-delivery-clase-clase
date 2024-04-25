@@ -7,7 +7,7 @@ const verifyEmailLogin = async (email) => {
     const existEmail = await User.findOne({ where: { email } });
 
     if (!existEmail) {
-        throw new Error('Invalidate credentials.');
+        throw new Error('Email not exists in the system.');
     }
 }
 

@@ -57,12 +57,12 @@ sequelize seed:generate --name [name_seeder]
 
 ### Revert last Seeder:
 ```code
-sequelize db:seeder:undo
+sequelize db:seed:undo
 ```
 
 ### Revert All Seeders:
 ```code
-sequelize db:seeder:undo:all
+sequelize db:seed:undo:all
 ```
 
 ### Execute Seeders:

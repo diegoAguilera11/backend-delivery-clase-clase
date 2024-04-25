@@ -1,5 +1,5 @@
 const { Router, request, response } = require("express");
-const { register, login } = require("../controllers/authController");
+const { register, login, validateToken } = require("../controllers/authController");
 const { check } = require("express-validator");
 const { validateFields } = require("../middlewares/validate-fields");
 const { verifyEmailLogin, verifyEmail } = require("../helpers/verify-email");
@@ -26,6 +26,7 @@ router.post('/register', [
     validateFields
 ], register);
 
+router.get('/validate-token', validateToken);
 
 
 

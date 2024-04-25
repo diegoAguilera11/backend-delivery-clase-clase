@@ -1,6 +1,8 @@
 const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
 
+const jwt = require("jsonwebtoken");
+
 
 const User = require("../models/user");
 const Role = require("../models/role");
@@ -29,7 +31,7 @@ const login = async (req = request, res = response) => {
             return res.status(400).json({
                 success: false,
                 error: true,
-                message: 'Invalidate credentials.'
+                message: 'Invalidate credentials.',
             });
         }
 
@@ -101,10 +103,64 @@ const register = async (req = request, res = response) => {
     }
 }
 
+const validateToken = async (req = request, res = response) => {
+    const authHeader = req.headers['authorization'];
+
+    // Separate the token from the "Bearer" prefix
+    token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: 'Not in token'
+        });
+    }
+
+    try {
+        const { id } = jwt.verify(token, process.env.SECRET_OR_PRIVATE_KEY);
+
+        const user = await User.findByPk(id);
+
+        const {
+            name,
+            lastName,
+            phone,
+            email,
+            image,
+            role_id
+        } = user;
+
+        const dataUser = { id, name, lastName, phone, email, image, role_id, session_token: token };
+
+        if (user) {
+            return res.status(200).json({
+                success: true,
+                message: 'Token is valid',
+                data: dataUser
+            })
+        }
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                success: false,
+                message: 'Token expired',
+                expired: true,
+                error
+            });
+        }
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid token',
+            error
+        });
+    }
+}
+
 
 
 
 module.exports = {
     login,
-    register
+    register,
+    validateToken
 }
