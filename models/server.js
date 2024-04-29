@@ -5,6 +5,7 @@ const logger = require('morgan');
 const db = require('../database/connection');
 const Role = require('./role');
 const User = require('./user');
+const fileUpload = require('express-fileupload');
 
 class Server {
     constructor() {
@@ -15,7 +16,8 @@ class Server {
         // Paths
         this.paths = {
             auth: '/api/auth',
-            user: '/api/user'
+            user: '/api/user',
+            upload: '/api/upload'
         }
 
         // Connect to database
@@ -49,11 +51,19 @@ class Server {
 
         // Cors
         this.app.use(cors());
+
+        // Fileupload - load archives
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes() {
         this.app.use(this.paths.auth, require('../routes/authRoutes'));
         this.app.use(this.paths.user, require('../routes/userRoutes'));
+        this.app.use(this.paths.upload, require('../routes/uploadRoutes'));
     }
 
     listen() {
