@@ -63,42 +63,50 @@ const login = async (req = request, res = response) => {
 
 const register = async (req = request, res = response) => {
     try {
-        const { name,
-            lastName,
-            email,
-            password,
-            phone } = req.body;
+        const { name: nameReq,
+            lastName: lastNameReq,
+            email: emailReq,
+            password: passwordReq,
+            phone: phoneReq } = req.body;
 
         // Get to client role
         const role = await Role.findOne({ where: { name: 'CLIENTE' } });
 
         // Create base user data
         const userData = {
-            name,
-            lastName,
-            email,
-            password,
-            phone,
+            name: nameReq,
+            lastName: lastNameReq,
+            email: emailReq,
+            password: passwordReq,
+            phone: phoneReq,
             role_id: role.id
         }
-
-        console.log(userData);
 
         const user = new User(userData);
         const salt = bcryptjs.genSaltSync();
         user.password = bcryptjs.hashSync(user.password, salt);
         await user.save();
 
-        res.status(200).json({
+        // Generate JWT
+        const token = await generateJWT(user.id);
+
+        // Destructuring especific data to user
+        const { id, name, lastName, phone, email, role_id } = user;
+
+        const dataUser = { id, name, lastName, phone, email, role_id, session_token: token };
+
+        res.status(201).json({
             success: true,
-            data: user,
+            data: dataUser,
             message: 'User created'
         });
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: 'Server error',
+            error: 'User not created'
         });
     }
 }

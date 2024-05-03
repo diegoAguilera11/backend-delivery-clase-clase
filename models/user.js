@@ -36,12 +36,12 @@ User.init({
     }
 }, {
     sequelize: db,
-    modelName: 'User'
+    modelName: 'User',
 });
 
-User.Role = User.belongsTo(require('./role'), {foreignKey: 'role_id'});
+User.Role = User.belongsTo(require('./role'), { foreignKey: 'role_id' });
 
-User.prototype.toJSON = function() {
+User.prototype.toJSON = function () {
     const user = this.get();
     delete user.password; // Delete this property password
     // Include the role_id
