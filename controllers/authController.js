@@ -39,10 +39,12 @@ const login = async (req = request, res = response) => {
         const token = await generateJWT(user.id);
 
         const userData = {
+            id: user.id,
             name: user.name,
             lastName: user.lastName,
             email: user.email,
             phone: user.phone,
+            image: user.image,
             role_id: user.role_id,
             session_token: token
         }
@@ -70,7 +72,7 @@ const register = async (req = request, res = response) => {
             phone: phoneReq } = req.body;
 
         // Get to client role
-        const role = await Role.findOne({ where: { name: 'CLIENTE' } });
+        const role = await Role.findOne({ where: { name: 'CLIENT' } });
 
         // Create base user data
         const userData = {

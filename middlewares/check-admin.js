@@ -1,10 +1,10 @@
+
 const { request, response } = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const Role = require("../models/role");
 
-
-
-const validateJWT = async (req = request, res = response, next) => {
+const checkAdmin = async (req = request, res = response, next) => {
     const authHeader = req.headers['authorization'];
 
     // Separate the token from "Bearer" prefix
@@ -22,10 +22,20 @@ const validateJWT = async (req = request, res = response, next) => {
 
         const user = await User.findByPk(id);
 
+        // Search role name by role_id
+        const { name: roleName } = await Role.findByPk(user.role_id);
+
         if (!user) {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid token'
+            });
+        }
+
+        if (roleName !== 'ADMINISTRATOR') {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized'
             });
         }
 
@@ -48,4 +58,4 @@ const validateJWT = async (req = request, res = response, next) => {
 }
 
 
-module.exports = { validateJWT };
+module.exports = checkAdmin;

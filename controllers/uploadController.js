@@ -1,5 +1,8 @@
 const { response, request } = require("express");
+
 const User = require("../models/user");
+const Category = require("../models/category");
+
 const cloudinary = require('cloudinary').v2;
 
 
@@ -15,6 +18,15 @@ const updateImageCloudinary = async (req = request, res = response) => {
                     return res.status(400).json({
                         success: false,
                         message: 'User not exist'
+                    });
+                }
+                break;
+            case 'categories':
+                model = await Category.findByPk(id);
+                if (!model) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Category not exist'
                     });
                 }
                 break;

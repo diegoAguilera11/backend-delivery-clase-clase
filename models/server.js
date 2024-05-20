@@ -6,6 +6,7 @@ const db = require('../database/connection');
 const Role = require('./role');
 const User = require('./user');
 const fileUpload = require('express-fileupload');
+const Category = require('./category');
 
 class Server {
     constructor() {
@@ -17,7 +18,8 @@ class Server {
         this.paths = {
             auth: '/api/auth',
             user: '/api/user',
-            upload: '/api/upload'
+            upload: '/api/upload',
+            category: '/api/category'
         }
 
         // Connect to database
@@ -35,6 +37,7 @@ class Server {
             await db.authenticate();
             await Role.sync({ force: false });
             await User.sync({ force: false });
+            await Category.sync({ force: false });
             console.log('DATABASE CONNECTED');
         } catch (error) {
             console.log(error);
@@ -64,6 +67,7 @@ class Server {
         this.app.use(this.paths.auth, require('../routes/authRoutes'));
         this.app.use(this.paths.user, require('../routes/userRoutes'));
         this.app.use(this.paths.upload, require('../routes/uploadRoutes'));
+        this.app.use(this.paths.category, require('../routes/categoryRoutes'));
     }
 
     listen() {

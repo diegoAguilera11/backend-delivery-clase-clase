@@ -20,6 +20,29 @@ const getUsers = async (req = request, res = response) => {
 }
 
 
+const putUser = async (req = request, res = response) => {
+    const { id } = req.params;
+
+    const { name, lastName, phone } = req.body;
+
+    const responseUpdate = await User.update({ name, lastName, phone }, { where: { id } });
+
+    const updateUser = await User.findByPk(id);
+
+    if (responseUpdate[0] === 0) {
+        return res.status(400).json({
+            success: false,
+            message: 'User not found'
+        });
+    }
+
+    res.status(201).json({
+        success: true,
+        data: updateUser
+    });
+}
+
+
 const changePassword = async (req = request, res = response) => {
     const { email } = req.body;
 
@@ -51,5 +74,6 @@ const changePassword = async (req = request, res = response) => {
 
 module.exports = {
     getUsers,
+    putUser,
     changePassword
 }
