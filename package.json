@@ -22,7 +22,8 @@
     "mysql2": "^3.9.3",
     "nodemailer": "^6.9.13",
     "sequelize": "^6.37.2",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "stripe": "^10.17.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1"

@@ -19,7 +19,8 @@ class Server {
             auth: '/api/auth',
             user: '/api/user',
             upload: '/api/upload',
-            category: '/api/category'
+            category: '/api/category',
+            order: '/api/order'
         }
 
         // Connect to database
@@ -68,6 +69,7 @@ class Server {
         this.app.use(this.paths.user, require('../routes/userRoutes'));
         this.app.use(this.paths.upload, require('../routes/uploadRoutes'));
         this.app.use(this.paths.category, require('../routes/categoryRoutes'));
+        this.app.use(this.paths.order, require('../routes/orderRoutes'));
     }
 
     listen() {
